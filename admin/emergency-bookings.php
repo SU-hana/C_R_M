@@ -112,7 +112,6 @@ if (strlen($_SESSION['alogin']) == 0) {
 												<th>From Date</th>
 												<th>To Date</th>
 												<th>Message</th>
-												<th>Emergency</th>
 												<th>Status</th>
 												<th>Posting date</th>
 												<th>Action</th>
@@ -126,7 +125,6 @@ if (strlen($_SESSION['alogin']) == 0) {
 												<th>From Date</th>
 												<th>To Date</th>
 												<th>Message</th>
-												<th>Emergency</th>
 												<th>Status</th>
 												<th>Posting date</th>
 												<th>Action</th>
@@ -134,13 +132,14 @@ if (strlen($_SESSION['alogin']) == 0) {
 										</tfoot>
 										<tbody>
 
-											<?php $sql = "SELECT tblusers.FullName,tblbrands.BrandName,tblvehicles.VehiclesTitle,tblbooking.FromDate,tblbooking.ToDate,tblbooking.message,tblbooking.VehicleId as vid,tblbooking.Status,tblbooking.embking,tblbooking.PostingDate,tblbooking.id  from tblbooking join tblvehicles on tblvehicles.id=tblbooking.VehicleId join tblusers on tblusers.EmailId=tblbooking.userEmail join tblbrands on tblvehicles.VehiclesBrand=tblbrands.id  ORDER BY tblbooking.id DESC";
+											<?php $sql = "SELECT tblusers.FullName,tblbrands.BrandName,tblvehicles.VehiclesTitle,tblbooking.FromDate,tblbooking.ToDate,tblbooking.message,tblbooking.VehicleId as vid,tblbooking.Status,tblbooking.PostingDate,tblbooking.id  from tblbooking join tblvehicles on tblvehicles.id=tblbooking.VehicleId join tblusers on tblusers.EmailId=tblbooking.userEmail join tblbrands on tblvehicles.VehiclesBrand=tblbrands.id WHERE tblbooking.embking = '1' ORDER BY tblbooking.id DESC ";
+                                            
 											$query = $dbh->prepare($sql);
 											$query->execute();
 											$results = $query->fetchAll(PDO::FETCH_OBJ);
 											$cnt = 1;
 											if ($query->rowCount() > 0) {
-												foreach ($results as $result) {				?>
+												foreach ($results as $result) {	 ?>
 													<tr>
 														<td><?php echo htmlentities($cnt); ?></td>
 														<td><?php echo htmlentities($result->FullName); ?></td>
@@ -148,7 +147,6 @@ if (strlen($_SESSION['alogin']) == 0) {
 														<td><?php echo htmlentities($result->FromDate); ?></td>
 														<td><?php echo htmlentities($result->ToDate); ?></td>
 														<td><?php echo htmlentities($result->message); ?></td>
-														<td><?php echo ($result->embking==1)? 'Yes' : 'No' ; ?></td>
 														<td><?php
 															if ($result->Status == 0) {
 																echo htmlentities('Not Confirmed yet');

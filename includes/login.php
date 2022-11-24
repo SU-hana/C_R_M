@@ -1,18 +1,23 @@
 <?php
+session_start();
 if(isset($_POST['login']))
 {
 $email=$_POST['email'];
 $password=md5($_POST['password']);
-$sql ="SELECT EmailId,Password,FullName FROM tblusers WHERE EmailId=:email and Password=:password";
+$sql ="SELECT id,ContactNo,EmailId,Password,FullName FROM tblusers WHERE EmailId=:email and Password=:password";
 $query= $dbh -> prepare($sql);
 $query-> bindParam(':email', $email, PDO::PARAM_STR);
 $query-> bindParam(':password', $password, PDO::PARAM_STR);
 $query-> execute();
 $results=$query->fetchAll(PDO::FETCH_OBJ);
+// echo $results->id;
+// die();
 if($query->rowCount() > 0)
 {
+$_SESSION['user']=$results;
 $_SESSION['login']=$_POST['email'];
 $_SESSION['fname']=$results->FullName;
+
 $currentpage=$_SERVER['REQUEST_URI'];
 echo "<script type='text/javascript'> document.location = '$currentpage'; </script>";
 } else{
